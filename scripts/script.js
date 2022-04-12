@@ -1,8 +1,8 @@
 'use strict';
 
 {
-    const modalTitle = document.getElementsByClassName('modal__title')[0].innerText;
-    const modalForm = document.getElementsByClassName('modal__form')[0];
+    const modalTitle = document.querySelector("h2.modal__title");
+    const modalForm = document.querySelector("form.modal__form");
     const discountChbx = document.getElementById('discount');
-    const discountCountInp = document.getElementsByName('discount_count')[0];
+    const discountCountInp = document.querySelector("input.modal__input.modal__input_discount");
 }
