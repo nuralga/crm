@@ -67,81 +67,33 @@
         }
     ]
     const createRow = (obj) => {
-        const tr = document.createElement('tr');
-        tr.classList.add('table__cell');
-        
-
-        const td0 = document.createElement('td');
-        td0.classList.add('table__cell');
-        td0.insertAdjacentText('beforeend', orderNumber);
-
-
-        const td1 = document.createElement('td');
-        td1.classList.add('table__cell',  'table__cell_left', 'table__cell_name');
-        td1.dataset.id = obj.id;
-
-        const span = document.createElement('span');
-        span.classList.add('table__cell-id');
-        span.innerText = 'ID: ' + obj.id;
-
-        td1.insertAdjacentElement('afterbegin', span);
-        td1.insertAdjacentText('beforeend', obj.title);
-
-        const td2 = document.createElement('td');
-        td2.classList.add('table__cell', 'table__cell_left');
-        td2.insertAdjacentText('afterbegin', obj.category);
-
-        const td3 = document.createElement('td');
-        td3.classList.add('table__cell');
-        td3.insertAdjacentText('afterbegin', obj.units);
-
-        const td4 = document.createElement('td');
-        td4.classList.add('table__cell');
-        td4.insertAdjacentText('afterbegin', obj.count);
-
-        const td5 = document.createElement('td');
-        td5.classList.add('table__cell');
-        td5.insertAdjacentText('afterbegin', '$' + obj.price);
-
-        const td6 = document.createElement('td');
-        td6.classList.add('table__cell');
-        td6.insertAdjacentText('afterbegin', '$' + obj.price * obj.count);
-
-        const td7 = document.createElement('td');
-        td7.classList.add('table__cell', 'table__cell_btn-wrapper')
-
-        const btn1 = document.createElement('button');
-        btn1.classList.add('table__btn', 'table__btn_pic');
-
-        const btn2 = document.createElement('button');
-        btn2.classList.add('table__btn', 'table__btn_edit');
-
-        const btn3 = document.createElement('button');
-        btn3.classList.add('table__btn', 'table__btn_del');
-        
-        td7.insertAdjacentElement('afterbegin', btn3);
-        td7.insertAdjacentElement('afterbegin', btn2);
-        td7.insertAdjacentElement('afterbegin', btn1);
-
-        tr.insertAdjacentElement('afterbegin', td7);
-        tr.insertAdjacentElement('afterbegin', td6);
-        tr.insertAdjacentElement('afterbegin', td5);
-        tr.insertAdjacentElement('afterbegin', td4);
-        tr.insertAdjacentElement('afterbegin', td3);
-        tr.insertAdjacentElement('afterbegin', td2);
-        tr.insertAdjacentElement('afterbegin', td1);
-        tr.insertAdjacentElement('afterbegin', td0);
+                
+        const lastTd = document.querySelector('tbody.table__body').lastElementChild;
+        lastTd.insertAdjacentHTML('afterend', `
+        <tr>
+            <td class="table__cell">${orderNumber}</td>
+            <td class="table__cell table__cell_left table__cell_name" data-id="${obj.id}">
+                <span class="table__cell-id">id: ${obj.id}</span>
+                ${obj.title}
+            </td>
+            <td class="table__cell table__cell_left">${obj.category}</td>
+            <td class="table__cell">${obj.units}</td>
+            <td class="table__cell">${obj.count}</td>
+            <td class="table__cell">$${obj.price}</td>
+            <td class="table__cell">$${obj.count * obj.price}</td>
+            <td class="table__cell table__cell_btn-wrapper">
+                <button class="table__btn table__btn_pic"></button>
+                <button class="table__btn table__btn_edit"></button>
+                <button class="table__btn table__btn_del"></button>
+            </td>
+        </tr>`);
         orderNumber++;
-        return tr;
     }
     
     let orderNumber = 3;
     const renderGoods = (arr) => {
         arr.forEach(element => {
-            let elem = createRow(element);
-            const lastTd = document.querySelector('tbody.table__body').lastElementChild;
-            lastTd.insertAdjacentElement('afterend', elem);
-            
+            createRow(element);
         });
     };
 
