@@ -6,11 +6,12 @@
     const discountChbx = document.getElementById('discount');
     const discountCountInp = document.querySelector("input.modal__input.modal__input_discount");
 
-    document.querySelector('.overlay').classList.remove('active');
+    const formOverlay = document.querySelector('.overlay');
+    formOverlay.classList.remove('active');
     
     const goods = [
         {
-            "id": 1,
+            "id": 3,
             "title": "Смартфон Xiaomi 11T 8/128GB",
             "price": 27000,
             "description": "Смартфон Xiaomi 11T – это представитель флагманской линейки, выпущенной во второй половине 2021 года. И он полностью соответствует такому позиционированию, предоставляя своим обладателям возможность пользоваться отличными камерами, ни в чем себя не ограничивать при запуске игр и других требовательных приложений.",
@@ -24,7 +25,7 @@
             }
         },
         {
-            "id": 2,
+            "id": 4,
             "title": "Радиоуправляемый автомобиль Cheetan",
             "price": 4000,
             "description": "Внедорожник на дистанционном управлении. Скорость 25км/ч. Возраст 7 - 14 лет",
@@ -38,7 +39,7 @@
             }
         },
         {
-            "id": 3,
+            "id": 5,
             "title": "ТВ приставка MECOOL KI",
             "price": 12400,
             "description": "Всего лишь один шаг сделает ваш телевизор умным, Быстрый и умный MECOOL KI PRO, прекрасно спроектированный, сочетает в себе прочный процессор Cortex-A53 с чипом Amlogic S905D",
@@ -52,7 +53,7 @@
             }
         },
         {
-            "id": 4,
+            "id": 6,
             "title": "Витая пара PROConnect 01-0043-3-25",
             "price": 22,
             "description": "Витая пара Proconnect 01-0043-3-25 является сетевым кабелем с 4 парами проводов типа UTP, в качестве проводника в которых используется алюминий, плакированный медью CCA. Такая неэкранированная витая пара с одножильными проводами диаметром 0.50 мм широко применяется в процессе сетевых монтажных работ. С ее помощью вы сможете обеспечить развертывание локальной сети в домашних условиях или на предприятии, объединить все необходимое вам оборудование в единую сеть.",
@@ -71,7 +72,7 @@
         const lastTd = document.querySelector('tbody.table__body').lastElementChild;
         lastTd.insertAdjacentHTML('afterend', `
         <tr>
-            <td class="table__cell">${orderNumber}</td>
+            <td class="table__cell">${obj.id}</td>
             <td class="table__cell table__cell_left table__cell_name" data-id="${obj.id}">
                 <span class="table__cell-id">id: ${obj.id}</span>
                 ${obj.title}
@@ -87,10 +88,8 @@
                 <button class="table__btn table__btn_del"></button>
             </td>
         </tr>`);
-        orderNumber++;
     }
     
-    let orderNumber = 3;
     const renderGoods = (arr) => {
         arr.forEach(element => {
             createRow(element);
@@ -98,4 +97,24 @@
     };
 
     renderGoods(goods);
+
+    // Functionalities
+    const btnAddGoods = document.querySelector('.panel__add-goods'); 
+        btnAddGoods.addEventListener('click', () => {
+            formOverlay.classList.add('active');
+        })
+
+    const btnCloseModal = document.querySelector('.modal__close');
+        btnCloseModal.addEventListener('click', () => {
+            formOverlay.classList.remove('active');
+        })
+
+    const form = document.querySelector('.overlay__modal');
+        form.addEventListener('click', e => {
+            e.stopImmediatePropagation();
+        })
+
+    formOverlay.addEventListener('click', () => {
+        formOverlay.classList.remove('active');
+    })
 }
