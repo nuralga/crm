@@ -8,7 +8,7 @@
 
     const formOverlay = document.querySelector('.overlay');
     formOverlay.classList.remove('active');
-    
+
     const goods = [
         {
             "id": 3,
@@ -67,8 +67,10 @@
             }
         }
     ]
+    
+    
     const createRow = (obj) => {
-                
+
         const lastTd = document.querySelector('tbody.table__body').lastElementChild;
         lastTd.insertAdjacentHTML('afterend', `
         <tr>
@@ -89,32 +91,48 @@
             </td>
         </tr>`);
     }
-    
+
     const renderGoods = (arr) => {
         arr.forEach(element => {
             createRow(element);
         });
     };
-
+    
     renderGoods(goods);
 
     // Functionalities
-    const btnAddGoods = document.querySelector('.panel__add-goods'); 
-        btnAddGoods.addEventListener('click', () => {
-            formOverlay.classList.add('active');
-        })
-
-    const btnCloseModal = document.querySelector('.modal__close');
-        btnCloseModal.addEventListener('click', () => {
-            formOverlay.classList.remove('active');
-        })
-
-    const form = document.querySelector('.overlay__modal');
-        form.addEventListener('click', e => {
-            e.stopImmediatePropagation();
-        })
-
-    formOverlay.addEventListener('click', () => {
-        formOverlay.classList.remove('active');
+    const btnAddGoods = document.querySelector('.panel__add-goods');
+    btnAddGoods.addEventListener('click', () => {
+        formOverlay.classList.add('active');
     })
+
+    formOverlay.addEventListener('click', e => {
+        const target = e.target;
+        if (target === formOverlay || target.closest('.modal__close')) {
+            formOverlay.classList.remove('active');
+        }
+    });
+    
+    let newArr = goods;
+    const list = document.querySelector('.table__body')
+    list.addEventListener('click', e => {
+        const target = e.target;
+        if (target.closest('.table__btn_del')) {
+            const elem = document.querySelector('.table__cell_name');
+            if (elem !== null){
+                let dataId = +elem.dataset.id;
+                console.log('dataId: ', dataId);
+                newArr = newArr.filter(object => {
+                    return object.id !== dataId;
+                });
+                
+                console.log(newArr) 
+            }
+            target.closest('tr').remove();
+            
+        }
+
+
+
+    });
 }
