@@ -67,8 +67,12 @@
             }
         }
     ]
-    
-    
+
+    const addItemData = item => {
+        goods.push(item);
+        console.log('goods: ', goods);
+    };
+
     const createRow = (obj) => {
 
         const lastTd = document.querySelector('tbody.table__body').lastElementChild;
@@ -97,42 +101,127 @@
             createRow(element);
         });
     };
-    
+
     renderGoods(goods);
 
     // Functionalities
+    const getRandomNumber = (min, max) => {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+    // Open Modal
+    let  itemId = 7;
+    let  vendorId = 7;
     const btnAddGoods = document.querySelector('.panel__add-goods');
     btnAddGoods.addEventListener('click', () => {
         formOverlay.classList.add('active');
+        const vendorCodeId = document.querySelector('.vendor-code__id');
+        console.log('vendorCodeId: ', vendorCodeId);
+        vendorId = getRandomNumber(24601654816512, 24501654816512);
+        vendorCodeId.innerText = vendorId;
+
     })
+
+    // Close Modal
+    const closeModal = () => {
+        formOverlay.classList.remove('active');
+            modalForm.reset();
+            modalTotalPrice.innerText = "$ 0.00"
+    }
 
     formOverlay.addEventListener('click', e => {
         const target = e.target;
         if (target === formOverlay || target.closest('.modal__close')) {
-            formOverlay.classList.remove('active');
+            closeModal();
         }
     });
-    
+
+    // Delete Item
     let newArr = goods;
     const list = document.querySelector('.table__body')
     list.addEventListener('click', e => {
         const target = e.target;
         if (target.closest('.table__btn_del')) {
             const elem = document.querySelector('.table__cell_name');
-            if (elem !== null){
+            if (elem !== null) {
                 let dataId = +elem.dataset.id;
                 console.log('dataId: ', dataId);
                 newArr = newArr.filter(object => {
                     return object.id !== dataId;
                 });
-                
-                console.log(newArr) 
+                calcCrmTotalPrice(newArr)
+                console.log(newArr)
             }
             target.closest('tr').remove();
-            
+
         }
-
-
-
     });
+
+    // Add New Item
+    discountChbx.addEventListener('change', e => {
+        if (e.target.checked) {
+            discountCountInp.removeAttribute('disabled');
+        } else {
+            discountCountInp.value = '';
+            discountCountInp.setAttribute('disabled', 'disabled');
+        }
+    });
+
+
+    Array.from(modalForm.elements).forEach(element => {
+        if (element.classList.contains('modal__input')) {
+            element.setAttribute('required', 'required');
+        }
+        let elementName = element.getAttribute('name')
+        if (elementName === 'count' || elementName === 'discount_count' || elementName === 'price') {
+            element.setAttribute('type', 'number');
+        }
+    });
+
+    const countInput = document.getElementById('count');
+    const priceInput = document.getElementById('price');
+    const modalTotalPrice = document.querySelector('.modal__total-price');
+    const crmTotalPrice = document.querySelector('.crm__total-price');
+
+
+    const calcTotalPrice = () => {
+        modalTotalPrice.innerText = `$ ${parseFloat(countInput.value * priceInput.value).toFixed(2)}`;
+    }
+
+    countInput.addEventListener('change', calcTotalPrice);
+
+    priceInput.addEventListener('change', calcTotalPrice);
+
+    const calcCrmTotalPrice = (arr) => {
+        let cost = 0;
+        Array.from(arr).forEach(element => {
+            cost += element.price * element.count;
+        });
+        crmTotalPrice.innerText = `$ ${parseFloat(cost).toFixed(2)}`;
+    }
+
+    calcCrmTotalPrice(goods);
+
+    const addItemPage = (item, list) => {
+        list.append(createRow(item));
+    };
+
+    const formControl = (form, list) => {
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            let newItem = Object.fromEntries(formData);
+            console.log('newItem: ', newItem);
+            newItem.id = itemId;
+            newItem.title = newItem.name;
+            addItemPage(newItem, list);
+            addItemData(newItem);
+            form.reset();
+            calcCrmTotalPrice(goods);
+            closeModal();
+        });
+    };
+
+    formControl(modalForm, list);
 }
