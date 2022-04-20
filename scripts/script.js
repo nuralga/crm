@@ -74,7 +74,6 @@
     };
 
     const createRow = (obj) => {
-
         const lastTd = document.querySelector('tbody.table__body').lastElementChild;
         lastTd.insertAdjacentHTML('afterend', `
         <tr>
@@ -111,16 +110,13 @@
         return Math.floor(Math.random() * (max - min)) + min;
     }
     // Open Modal
-    let  itemId = 7;
-    let  vendorId = 7;
+    let  vendorId;
     const btnAddGoods = document.querySelector('.panel__add-goods');
     btnAddGoods.addEventListener('click', () => {
         formOverlay.classList.add('active');
         const vendorCodeId = document.querySelector('.vendor-code__id');
-        console.log('vendorCodeId: ', vendorCodeId);
         vendorId = getRandomNumber(24601654816512, 24501654816512);
         vendorCodeId.innerText = vendorId;
-
     })
 
     // Close Modal
@@ -203,19 +199,20 @@
 
     calcCrmTotalPrice(goods);
 
-    const addItemPage = (item, list) => {
-        list.append(createRow(item));
+    const addItemPage = (item) => {
+        createRow(item);
     };
 
-    const formControl = (form, list) => {
+    const formControl = (form) => {
         form.addEventListener('submit', e => {
             e.preventDefault();
             const formData = new FormData(e.target);
             let newItem = Object.fromEntries(formData);
             console.log('newItem: ', newItem);
+            let  itemId = goods[goods.length-1].id + 1;
             newItem.id = itemId;
             newItem.title = newItem.name;
-            addItemPage(newItem, list);
+            addItemPage(newItem);
             addItemData(newItem);
             form.reset();
             calcCrmTotalPrice(goods);
@@ -223,5 +220,5 @@
         });
     };
 
-    formControl(modalForm, list);
+    formControl(modalForm);
 }
