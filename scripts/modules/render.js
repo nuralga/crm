@@ -1,7 +1,7 @@
 import modal from './modal.js';
 import goods from './goods.js';
 import * as calc from './calc.js';
-import {createRow} from './control.js';
+import {createRow, btnGroups} from './control.js';
 
 export const renderCrm = () => {
   const overlay = document.querySelector('.overlay');
@@ -42,6 +42,7 @@ export const renderCrm = () => {
   calc.calcCrmTotalPrice(goods);
 
   renderGoods(goods);
+  btnGroups();
 
   return {
     formOverlay: overlay,
